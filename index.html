@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Ban Checker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #999;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input[type="tel"] {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .check-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .admin-btn {
+            background: #f0f0f0;
+            color: #667eea;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 12px;
+            display: none;
+            animation: slideIn 0.3s ease-in-out;
+        }
+
+        .result.banned {
+            background: #fee;
+            border: 2px solid #f88;
+            color: #c33;
+        }
+
+        .result.safe {
+            background: #efe;
+            border: 2px solid #8f8;
+            color: #383;
+        }
+
+        .result h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .result p {
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        .admin-panel {
+            display: none;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #667eea;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .ban-list {
+            max-height: 300px;
+            overflow-y: auto;
+            text-align: left;
+        }
+
+        .ban-item {
+            background: #f9f9f9;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border-left: 4px solid #667eea;
+            font-size: 13px;
+        }
+
+        .ban-item h3 {
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .ban-item p {
+            color: #666;
+            margin: 2px 0;
+        }
+
+        .remove-btn {
+            background: #f88 !important;
+            color: white !important;
+            padding: 6px 12px !important;
+            font-size: 12px !important;
+            margin-top: 8px !important;
+            width: 100% !important;
+        }
+
+        .remove-btn:hover {
+            background: #f00 !important;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: none;
+            font-size: 14px;
+            animation: slideIn 0.3s ease-in-out;
+        }
+
+        .message.success {
+            background: #efe;
+            border: 2px solid #8f8;
+            color: #383;
+            display: block;
+        }
+
+        .message.error {
+            background: #fee;
+            border: 2px solid #f88;
+            color: #c33;
+            display: block;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #999;
+            padding: 20px;
+        }
+
+        .back-btn {
+            background: #f0f0f0 !important;
+            color: #667eea !important;
+            margin-top: 10px !important;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- MAIN PAGE -->
+        <div class="card" id="mainPage">
+            <div class="logo">📱</div>
+            <h1>WhatsApp Ban Checker</h1>
+            <p class="subtitle">Vérifiez si un numéro est banni</p>
+
+            <div class="input-group">
+                <label for="phoneNumber">Numéro WhatsApp</label>
+                <input 
+                    type="tel" 
+                    id="phoneNumber" 
+                    placeholder="+56922415788"
+                    autocomplete="off"
+                >
+            </div>
+
+            <div class="button-group">
+                <button class="check-btn" onclick="checkBan()">🔍 Vérifier</button>
+                <button class="admin-btn" onclick="goToAdmin()">🔐 Admin</button>
+            </div>
+
+            <div class="result" id="result"></div>
+        </div>
+
+        <!-- ADMIN LOGIN -->
+        <div class="card" id="adminLogin" style="display: none;">
+            <div class="logo">🔐</div>
+            <h1>Admin Login</h1>
+            <p class="subtitle">Entrez votre mot de passe</p>
+
+            <div class="input-group">
+                <input 
+                    type="password" 
+                    id="adminPassword" 
+                    placeholder="Mot de passe"
+                    autocomplete="off"
+                >
+            </div>
+
+            <button class="check-btn" onclick="login()">Connexion</button>
+            <button class="admin-btn" onclick="goBack()">← Retour</button>
+
+            <div class="message" id="loginError"></div>
+        </div>
+
+        <!-- ADMIN PANEL -->
+        <div class="card" id="adminPanel" style="display: none;">
+            <h1>⚙️ Panel Admin</h1>
+
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="switchTab('add')">➕ Ajouter</button>
+                <button class="tab-btn" onclick="switchTab('list')">📋 Liste</button>
+            </div>
+
+            <!-- ADD BAN TAB -->
+            <div class="tab-content active" id="tab-add">
+                <div class="input-group">
+                    <label for="banPhoneNumber">Numéro WhatsApp</label>
+                    <input 
+                        type="tel" 
+                        id="banPhoneNumber" 
+                        placeholder="+56922415788"
+                        autocomplete="off"
+                    >
+                </div>
+
+                <div class="input-group">
+                    <label for="banReason">Raison du ban</label>
+                    <textarea 
+                        id="banReason" 
+                        placeholder="Spam, Harcèlement, etc."
+                        rows="3"
+                        style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: inherit; font-size: 14px;"
+                    ></textarea>
+                </div>
+
+                <button class="check-btn" onclick="addBan()">✅ Bannir</button>
+                <div class="message" id="addMessage"></div>
+            </div>
+
+            <!-- LIST BANS TAB -->
+            <div class="tab-content" id="tab-list">
+                <div class="ban-list" id="banList">
+                    <div class="empty-state">Aucun utilisateur banni</div>
+                </div>
+            </div>
+
+            <button class="admin-btn back-btn" onclick="logout()">Déconnexion</button>
+        </div>
+    </div>
+
+    <script>
+        let bannedNumbers = [
+            { number: '+18352613044', reason: 'Spam', bannedDate: '2024-01-15' }
+        ];
+
+        const ADMIN_PASSWORD = 'Killua_3681';
+        let isLoggedIn = false;
+
+        function checkBan() {
+            const phone = document.getElementById('phoneNumber').value.trim();
+            const resultDiv = document.getElementById('result');
+
+            if (!phone) {
+                showMessage(resultDiv, 'Entrez un numéro!', 'error');
+                return;
+            }
+
+            const cleanPhone = phone.replace(/[\s\-()]/g, '');
+            const isBanned = bannedNumbers.some(ban => 
+                ban.number.replace(/[\s\-()]/g, '') === cleanPhone
+            );
+
+            if (isBanned) {
+                const ban = bannedNumbers.find(b => 
+                    b.number.replace(/[\s\-()]/g, '') === cleanPhone
+                );
+                resultDiv.innerHTML = `
+                    <h2>⛔ CE NUMÉRO EST BANNI</h2>
+                    <p><strong>Raison:</strong> ${ban.reason}</p>
+                    <p><strong>Date:</strong> ${ban.bannedDate}</p>
+                `;
+                resultDiv.className = 'result banned';
+            } else {
+                resultDiv.innerHTML = `
+                    <h2>✅ CE NUMÉRO EST SÛRE</h2>
+                    <p>Aucun problème détecté!</p>
+                `;
+                resultDiv.className = 'result safe';
+            }
+
+            resultDiv.style.display = 'block';
+        }
+
+        function goToAdmin() {
+            document.getElementById('mainPage').style.display = 'none';
+            document.getElementById('adminLogin').style.display = 'block';
+        }
+
+        function goBack() {
+            document.getElementById('adminLogin').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('mainPage').style.display = 'block';
+            document.getElementById('adminPassword').value = '';
+        }
+
+        function login() {
+            const password = document.getElementById('adminPassword').value;
+            const errorDiv = document.getElementById('loginError');
+
+            if (!password) {
+                showMessage(errorDiv, 'Entrez votre mot de passe!', 'error');
+                return;
+            }
+
+            if (password === ADMIN_PASSWORD) {
+                isLoggedIn = true;
+                document.getElementById('adminLogin').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                refreshBanList();
+            } else {
+                showMessage(errorDiv, '❌ Mot de passe incorrect!', 'error');
+            }
+        }
+
+        function addBan() {
+            const phone = document.getElementById('banPhoneNumber').value.trim();
+            const reason = document.getElementById('banReason').value.trim();
+            const messageDiv = document.getElementById('addMessage');
+
+            if (!phone || !reason) {
+                showMessage(messageDiv, 'Remplissez tous les champs!', 'error');
+                return;
+            }
+
+            const cleanPhone = phone.replace(/[\s\-()]/g, '');
+            const exists = bannedNumbers.find(b => 
+                b.number.replace(/[\s\-()]/g, '') === cleanPhone
+            );
+
+            if (exists) {
+                showMessage(messageDiv, 'Ce numéro est déjà banni!', 'error');
+                return;
+            }
+
+            bannedNumbers.push({
+                number: phone,
+                reason: reason,
+                bannedDate: new Date().toLocaleDateString('fr-FR')
+            });
+
+            showMessage(messageDiv, '✅ Numéro banni avec succès!', 'success');
+            document.getElementById('banPhoneNumber').value = '';
+            document.getElementById('banReason').value = '';
+            refreshBanList();
+        }
+
+        function removeBan(index) {
+            if (confirm('Débannir ce numéro?')) {
+                bannedNumbers.splice(index, 1);
+                refreshBanList();
+            }
+        }
+
+        function refreshBanList() {
+            const banList = document.getElementById('banList');
+
+            if (bannedNumbers.length === 0) {
+                banList.innerHTML = '<div class="empty-state">Aucun utilisateur banni</div>';
+                return;
+            }
+
+            let html = '';
+            bannedNumbers.forEach((ban, index) => {
+                html += `
+                    <div class="ban-item">
+                        <h3>📱 ${ban.number}</h3>
+                        <p><strong>Raison:</strong> ${ban.reason}</p>
+                        <p><strong>Date:</strong> ${ban.bannedDate}</p>
+                        <button class="remove-btn" onclick="removeBan(${index})">❌ Débannir</button>
+                    </div>
+                `;
+            });
+            banList.innerHTML = html;
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+            document.getElementById(`tab-${tab}`).classList.add('active');
+            event.target.classList.add('active');
+
+            if (tab === 'list') {
+                refreshBanList();
+            }
+        }
+
+        function logout() {
+            isLoggedIn = false;
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('mainPage').style.display = 'block';
+        }
+
+        function showMessage(element, text, type) {
+            element.textContent = text;
+            element.className = `message ${type}`;
+        }
+
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const active = document.activeElement.id;
+                if (active === 'phoneNumber') checkBan();
+                if (active === 'adminPassword') login();
+            }
+        });
+    </script>
+</body>
+</html>
