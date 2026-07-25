@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WhatsApp Ban Checker</title>
+    <title>WhatsApp Ban Checker - Doro</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -27,26 +27,33 @@
         }
 
         .card {
-            background: white;
+            background: #0a0a0a;
             border-radius: 20px;
             padding: 40px 30px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 60px rgba(255, 0, 0, 0.2);
             text-align: center;
+            border: 2px solid #cc0000;
         }
 
-        .logo {
-            font-size: 60px;
-            margin-bottom: 20px;
+        .logo-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 15px;
+            margin: 0 auto 20px;
+            object-fit: cover;
+            border: 3px solid #cc0000;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
         }
 
         h1 {
-            color: #333;
+            color: #cc0000;
             font-size: 28px;
             margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
         }
 
         .subtitle {
-            color: #999;
+            color: #888;
             font-size: 14px;
             margin-bottom: 30px;
         }
@@ -58,25 +65,31 @@
 
         label {
             display: block;
-            color: #333;
+            color: #cc0000;
             font-weight: 600;
             margin-bottom: 8px;
             font-size: 14px;
         }
 
-        input[type="tel"] {
+        input[type="tel"],
+        input[type="password"],
+        textarea {
             width: 100%;
             padding: 14px;
-            border: 2px solid #e0e0e0;
+            border: 2px solid #cc0000;
             border-radius: 12px;
             font-size: 16px;
-            transition: border-color 0.3s;
+            transition: all 0.3s;
             font-family: inherit;
+            background: #1a1a1a;
+            color: #ffffff;
         }
 
-        input:focus {
+        input:focus,
+        textarea:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #ff3333;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
         }
 
         .button-group {
@@ -101,13 +114,24 @@
         }
 
         .check-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #cc0000 0%, #ff3333 100%);
             color: white;
+            border: 2px solid #cc0000;
+        }
+
+        .check-btn:hover {
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
         }
 
         .admin-btn {
-            background: #f0f0f0;
-            color: #667eea;
+            background: #1a1a1a;
+            color: #cc0000;
+            border: 2px solid #cc0000;
+        }
+
+        .admin-btn:hover {
+            background: #cc0000;
+            color: #ffffff;
         }
 
         .result {
@@ -119,15 +143,15 @@
         }
 
         .result.banned {
-            background: #fee;
-            border: 2px solid #f88;
-            color: #c33;
+            background: #330000;
+            border: 2px solid #cc0000;
+            color: #ff3333;
         }
 
         .result.safe {
-            background: #efe;
-            border: 2px solid #8f8;
-            color: #383;
+            background: #001a00;
+            border: 2px solid #00cc00;
+            color: #00ff00;
         }
 
         .result h2 {
@@ -153,17 +177,17 @@
         .tab-btn {
             flex: 1;
             padding: 10px;
-            background: #f0f0f0;
-            border: none;
+            background: #1a1a1a;
+            border: 2px solid #cc0000;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
-            color: #667eea;
+            color: #cc0000;
             transition: all 0.3s;
         }
 
         .tab-btn.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #cc0000 0%, #ff3333 100%);
             color: white;
         }
 
@@ -182,35 +206,37 @@
         }
 
         .ban-item {
-            background: #f9f9f9;
+            background: #1a1a1a;
             padding: 12px;
             border-radius: 8px;
             margin-bottom: 8px;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid #cc0000;
             font-size: 13px;
+            color: #ffffff;
         }
 
         .ban-item h3 {
-            color: #333;
+            color: #cc0000;
             margin-bottom: 3px;
         }
 
         .ban-item p {
-            color: #666;
+            color: #888;
             margin: 2px 0;
         }
 
         .remove-btn {
-            background: #f88 !important;
+            background: #cc0000 !important;
             color: white !important;
             padding: 6px 12px !important;
             font-size: 12px !important;
             margin-top: 8px !important;
             width: 100% !important;
+            border: none !important;
         }
 
         .remove-btn:hover {
-            background: #f00 !important;
+            background: #ff3333 !important;
         }
 
         .message {
@@ -223,29 +249,55 @@
         }
 
         .message.success {
-            background: #efe;
-            border: 2px solid #8f8;
-            color: #383;
+            background: #001a00;
+            border: 2px solid #00cc00;
+            color: #00ff00;
             display: block;
         }
 
         .message.error {
-            background: #fee;
-            border: 2px solid #f88;
-            color: #c33;
+            background: #330000;
+            border: 2px solid #cc0000;
+            color: #ff3333;
             display: block;
         }
 
         .empty-state {
             text-align: center;
-            color: #999;
+            color: #666;
             padding: 20px;
         }
 
         .back-btn {
-            background: #f0f0f0 !important;
-            color: #667eea !important;
+            background: #1a1a1a !important;
+            color: #cc0000 !important;
             margin-top: 10px !important;
+            border: 2px solid #cc0000 !important;
+        }
+
+        .back-btn:hover {
+            background: #cc0000 !important;
+            color: #ffffff !important;
+        }
+
+        .config-section {
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 2px solid #cc0000;
+            text-align: left;
+        }
+
+        .config-section h3 {
+            color: #cc0000;
+            margin-bottom: 10px;
+        }
+
+        .config-section p {
+            color: #888;
+            font-size: 12px;
+            margin-bottom: 10px;
         }
 
         @keyframes slideIn {
@@ -258,13 +310,26 @@
                 transform: translateY(0);
             }
         }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cc0000;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- MAIN PAGE -->
         <div class="card" id="mainPage">
-            <div class="logo">📱</div>
+            <img src="https://files.catbox.moe/jjhojw.png" alt="Logo" class="logo-img" id="mainLogo">
             <h1>WhatsApp Ban Checker</h1>
             <p class="subtitle">Vérifiez si un numéro est banni</p>
 
@@ -288,7 +353,7 @@
 
         <!-- ADMIN LOGIN -->
         <div class="card" id="adminLogin" style="display: none;">
-            <div class="logo">🔐</div>
+            <div style="font-size: 60px; margin-bottom: 20px;">🔐</div>
             <h1>Admin Login</h1>
             <p class="subtitle">Entrez votre mot de passe</p>
 
@@ -314,6 +379,7 @@
             <div class="tab-buttons">
                 <button class="tab-btn active" onclick="switchTab('add')">➕ Ajouter</button>
                 <button class="tab-btn" onclick="switchTab('list')">📋 Liste</button>
+                <button class="tab-btn" onclick="switchTab('config')">⚙️ Config</button>
             </div>
 
             <!-- ADD BAN TAB -->
@@ -334,7 +400,6 @@
                         id="banReason" 
                         placeholder="Spam, Harcèlement, etc."
                         rows="3"
-                        style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: inherit; font-size: 14px;"
                     ></textarea>
                 </div>
 
@@ -349,6 +414,46 @@
                 </div>
             </div>
 
+            <!-- CONFIG TAB -->
+            <div class="tab-content" id="tab-config">
+                <div class="config-section">
+                    <h3>📷 Images</h3>
+                    <p>Changez les images en collant les URL:</p>
+                    <div class="input-group">
+                        <label for="logoUrl">URL du Logo Principal</label>
+                        <input 
+                            type="text" 
+                            id="logoUrl" 
+                            placeholder="https://files.catbox.moe/jjhojw.png"
+                            value="https://files.catbox.moe/jjhojw.png"
+                        >
+                        <button class="check-btn" style="margin-top: 10px;" onclick="updateLogo()">Mettre à jour</button>
+                    </div>
+                </div>
+
+                <div class="config-section">
+                    <h3>📝 Textes Personnalisés</h3>
+                    <div class="input-group">
+                        <label for="bannedText">Texte quand BANNI</label>
+                        <textarea 
+                            id="bannedText" 
+                            rows="3"
+                        >Fait Doro par ༒𝕻𝕽𝕴𝕹𝕮𝕰 𝖅𝖊𝖗𝖔𝕯𝖊𝖌𝖔𝖎𝖊༒🖤🍷</textarea>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="safeText">Texte quand PAS BANNI</label>
+                        <textarea 
+                            id="safeText" 
+                            rows="3"
+                        >Il n'est pas encore Faire Doro🖤🍷</textarea>
+                    </div>
+
+                    <button class="check-btn" onclick="updateTexts()">💾 Enregistrer</button>
+                    <div class="message" id="configMessage"></div>
+                </div>
+            </div>
+
             <button class="admin-btn back-btn" onclick="logout()">Déconnexion</button>
         </div>
     </div>
@@ -360,6 +465,34 @@
 
         const ADMIN_PASSWORD = 'Killua_3681';
         let isLoggedIn = false;
+
+        let customTexts = {
+            banned: 'Fait Doro par ༒𝕻𝕽𝕴𝕹𝕮𝕰 𝖅𝖊𝖗𝖔𝕯𝖊𝖌𝖔𝖎𝖊༒🖤🍷',
+            safe: 'Il n\'est pas encore Faire Doro🖤🍷'
+        };
+
+        // Load custom texts from localStorage
+        function loadCustomTexts() {
+            const saved = localStorage.getItem('customTexts');
+            if (saved) {
+                customTexts = JSON.parse(saved);
+                document.getElementById('bannedText').value = customTexts.banned;
+                document.getElementById('safeText').value = customTexts.safe;
+            }
+        }
+
+        // Load banned numbers from localStorage
+        function loadBannedNumbers() {
+            const saved = localStorage.getItem('bannedNumbers');
+            if (saved) {
+                bannedNumbers = JSON.parse(saved);
+            }
+        }
+
+        // Save banned numbers to localStorage
+        function saveBannedNumbers() {
+            localStorage.setItem('bannedNumbers', JSON.stringify(bannedNumbers));
+        }
 
         function checkBan() {
             const phone = document.getElementById('phoneNumber').value.trim();
@@ -380,15 +513,14 @@
                     b.number.replace(/[\s\-()]/g, '') === cleanPhone
                 );
                 resultDiv.innerHTML = `
-                    <h2>⛔ CE NUMÉRO EST BANNI</h2>
+                    <h2>⛔ ${customTexts.banned}</h2>
                     <p><strong>Raison:</strong> ${ban.reason}</p>
                     <p><strong>Date:</strong> ${ban.bannedDate}</p>
                 `;
                 resultDiv.className = 'result banned';
             } else {
                 resultDiv.innerHTML = `
-                    <h2>✅ CE NUMÉRO EST SÛRE</h2>
-                    <p>Aucun problème détecté!</p>
+                    <h2>✅ ${customTexts.safe}</h2>
                 `;
                 resultDiv.className = 'result safe';
             }
@@ -419,6 +551,7 @@
 
             if (password === ADMIN_PASSWORD) {
                 isLoggedIn = true;
+                loadCustomTexts();
                 document.getElementById('adminLogin').style.display = 'none';
                 document.getElementById('adminPanel').style.display = 'block';
                 refreshBanList();
@@ -453,6 +586,7 @@
                 bannedDate: new Date().toLocaleDateString('fr-FR')
             });
 
+            saveBannedNumbers();
             showMessage(messageDiv, '✅ Numéro banni avec succès!', 'success');
             document.getElementById('banPhoneNumber').value = '';
             document.getElementById('banReason').value = '';
@@ -462,6 +596,7 @@
         function removeBan(index) {
             if (confirm('Débannir ce numéro?')) {
                 bannedNumbers.splice(index, 1);
+                saveBannedNumbers();
                 refreshBanList();
             }
         }
@@ -500,6 +635,32 @@
             }
         }
 
+        function updateLogo() {
+            const url = document.getElementById('logoUrl').value.trim();
+            if (!url) {
+                alert('Entrez une URL!');
+                return;
+            }
+            document.getElementById('mainLogo').src = url;
+            alert('Logo mis à jour!');
+        }
+
+        function updateTexts() {
+            const banned = document.getElementById('bannedText').value.trim();
+            const safe = document.getElementById('safeText').value.trim();
+            const messageDiv = document.getElementById('configMessage');
+
+            if (!banned || !safe) {
+                showMessage(messageDiv, 'Remplissez tous les champs!', 'error');
+                return;
+            }
+
+            customTexts.banned = banned;
+            customTexts.safe = safe;
+            localStorage.setItem('customTexts', JSON.stringify(customTexts));
+            showMessage(messageDiv, '✅ Textes enregistrés!', 'success');
+        }
+
         function logout() {
             isLoggedIn = false;
             document.getElementById('adminPanel').style.display = 'none';
@@ -517,6 +678,12 @@
                 if (active === 'phoneNumber') checkBan();
                 if (active === 'adminPassword') login();
             }
+        });
+
+        // Load data on page load
+        window.addEventListener('load', function() {
+            loadBannedNumbers();
+            loadCustomTexts();
         });
     </script>
 </body>
